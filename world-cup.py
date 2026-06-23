@@ -47,17 +47,11 @@ def promptForFavorites():
 def getMatchHype(team1, team2, h2h_data, prediction_data):
     # Format the last 5 H2H results into a readable string
     h2h_summary = ""
-    for match in h2h_data[:5]:
-        date = match["date"]
-        home = match["teams"]["home"]["name"]
-        away = match["teams"]["away"]["name"]
-        home_score = match["goals"]["home"]
-        away_score = match["goals"]["away"]
-      h2h_summary += f"\n- {date}: {home} {home_score}-{away_score} {away}"
+   
 
-    home_win = prediction_data["percent"]["home"]
-    draw = prediction_data["percent"]["draw"]
-    away_win = prediction_data["percent"]["away"]
+    home_win = 
+    draw = 
+    away_win = 
 
     prompt = f"""You are a football pundit. Write a hype paragraph or two for the upcoming World Cup match between {team1} and {team2}.
 
