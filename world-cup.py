@@ -1,24 +1,42 @@
 import os 
-from google 
-import genai from google.genai 
-import types 
-my_api_key = os.getenv('GOOGLEAPI') 
-genai.api_key = my_api_key 
+import requests
+import google.generativeai as genai
+from dotenv import load_dotenv
+
+load_dotenv() 
+
+google_key = os.getenv('GOOGLEAPI') 
 football_key = os.getenv('FOOTBALLAPI') 
 youtube_key = os.getenv('YOUTUBEAPI') 
+genai.configure(api_key=google_key)
 
-print(football_key)
- print(youtube_key) 
- print(google_key) 
+ ## If database is empty ask user for favorite teams and populate 
+ ## If not load database 
+ ## Prompt for match date in interest
+ ## Check if match date is already in database, if so return previous results to save API calls
+ ## Check if match is past or future 
+ ## Else check if favorite teams are playing
+  ##  If one return contextualization of that match
+  ## If multiple then make user choose one of the matches that their favorites are playing in
+  ## If none then LLM chooses best match to watch
+  ## Return most recent faceoff highlights 
  
+print("Welcome to the World Cup Hype Engine!")
+print("Enter your favorite national teams. Type 'DONE' when finished.")
  # Take input from user for favorite teams, saves it to database, and then prompts for specific match date while(input() is not None): 
- favorite_team = input() 
- 
+#while True:
+  #team_input = input("> ").strip()
  # Gets all matches from match data compares it to listed favorites. If none, then all matches are given to LLM. 
- def getMatches(date): 
+ #def getMatches(date): 
   
   # Takes match/matches from getMatches and prompts LLM for match contextualization. 
-  def getMatchHype(List teams): 
-    
+def getMatchHype(team1, team2): 
+  model = genai.GenerativeModel('gemini-2.5-flash')
+  prompt = f"You are a football pundit. Write a hype paragraph or two summary for the upcoming World Cup match between {team1} and {team2}. Include any background information, historical rivalry, current stakes, or players to watch."
+  response = model.generate_content(prompt)
+  return response
+
   #Uses youtube API to find previous match highlights 
-  def getPreviousMatches(team1, team2):
+  #def getPreviousMatches(team1, team2):
+
+if __name__ == "__main__":
