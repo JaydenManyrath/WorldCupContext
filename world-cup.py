@@ -1,9 +1,15 @@
 import os 
 import requests
-import google.generativeai as genai
+#import google.generativeai as genai
 from dotenv import load_dotenv
+from database import initialize_database, fetch_all
 
-load_dotenv() 
+initialize_database()
+tables = fetch_all("SELECT name FROM sqlite_master WHERE type ='table';")
+print(tables)
+
+
+#load_dotenv() 
 
 google_key = os.getenv('GOOGLEAPI') 
 football_key = os.getenv('FOOTBALLAPI') 
@@ -39,4 +45,4 @@ def getMatchHype(team1, team2):
   #Uses youtube API to find previous match highlights 
   #def getPreviousMatches(team1, team2):
 
-if __name__ == "__main__":
+#if __name__ == "__main__":
