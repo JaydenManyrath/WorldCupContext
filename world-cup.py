@@ -112,7 +112,7 @@ def findSpotlightMatch(matches, favorites):
           except ValueError:
               print("  Invalid input, please enter a number")
 
-def displayDash(hype_text, favorites):
+def displayDash(hype_text, matches, favorites):
   print("=" * 45)
   print("       WORLD CUP 2026 DASHBOARD")
   print("=" * 45)
@@ -126,7 +126,7 @@ def displayDash(hype_text, favorites):
   print("-" * 45)
   conn = getDB()
   for team_id in favorites:
-    team_name = conn.execute("SELECT name FROM teams WHERE id = ?", (team_id, team_id)).fetchone()
+    team_name = conn.execute("SELECT name FROM teams WHERE id = ?", (team_id,)).fetchone()
     next_match = conn.execute("""
     SELECT m.utc_date, ht.name, at.name
     FROM matches m 
@@ -162,4 +162,4 @@ if __name__ == "__main__":
       print("No World Cup matches today.")
   else:
       hype = findSpotlightMatch(matches, favorites)
-      displayDash(hype_text, matches, favorites)
+      displayDash(hype, matches, favorites)
