@@ -102,15 +102,15 @@ def findSpotlightMatch(matches, favorites):
       for i, match in enumerate(spotlightMatches):
           print(f"  [{i + 1}] {match['home_team_name']} vs {match['away_team_name']}  —  {match['utc_date']}")
 
-       while True:
-          try:
-              choice = int(input("\nEnter a number: ").strip())
-              if 1 <= choice <= len(spotlightMatches):
-                  return getMatchHype(spotlightMatches[choice - 1])
-              else:
-                  print(f"  Please enter a number between 1 and {len(spotlightMatches)}")
-          except ValueError:
-              print("  Invalid input, please enter a number")
+      while True:
+        try:
+          choice = int(input("\nEnter a number: ").strip())
+          if 1 <= choice <= len(spotlightMatches):
+              return getMatchHype(spotlightMatches[choice - 1])
+          else:
+            print(f"  Please enter a number between 1 and {len(spotlightMatches)}")
+        except ValueError:
+          print("  Invalid input, please enter a number")
 
 def displayDash(hype_text, matches, favorites):
   print("=" * 45)
