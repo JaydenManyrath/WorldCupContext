@@ -3,6 +3,8 @@ print(os.path.abspath("worldcup.db"))
 import json
 import requests
 from database import get_connection
+from dotenv import load_dotenv
+load_dotenv()
 
 url = "https://api.football-data.org/v4/competitions/WC/teams"
 

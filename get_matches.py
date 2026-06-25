@@ -3,6 +3,8 @@ import os
 import re
 from datetime import date
 from database import get_connection
+from dotenv import load_dotenv
+load_dotenv()
 
 API_KEY = os.getenv("SPORTSAPI")
 BASE_URL = "https://v3.football.api-sports.io/fixtures"

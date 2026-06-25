@@ -1,6 +1,8 @@
 import os
 import requests
 from database import get_connection
+from dotenv import load_dotenv
+load_dotenv()
 
 URL = "https://api.football-data.org/v4/competitions/WC/matches?season=2026"
 

@@ -37,7 +37,8 @@ def saveTeam(team_name):
       return False
 
 def getMatches():
-  pass  
+  from get_matches import get_matches as fetch
+  return get_matches()
 
 def load_favorites():
   conn = getDB()
@@ -62,15 +63,33 @@ def promptForFavorites():
               print(f"  ✗ '{team_input}' not found in World Cup teams. Check spelling.")
 
 def getMatchHype(match):
+  from prediction import get_match_prediction
+
   team1 = match["home_team_name"]
   team2 = match["away_team_name"]
+  fixture_id = match["id"]
+  if fixture_id:  
+    prediction = get_match_prediction(fixture_id)
+  else:
+    prediction = None
+
+  pred_text = ""
+  if prediction:
+    pred_text = f"{team1} win {prediction['home_win_percent']}, Draw {prediction['draw_percent']}, {team2} win {prediction['away_win_percent']}. {prediction['advice']}"
+  else:
+    pred_text = "No prediction available."
 
   prompt = f"""You are a football pundit. Write a hype paragraph or two for the upcoming World Cup match between {team1} and {team2}.
-Include historical rivalry context, current stakes, and players to watch."""
+
+  Their last 5 meetings:
+
+  Prediction: {pred_text}
+
+  Include historical rivalry context, current stakes, and players to watch. Do not contradict the statistics provided."""
 
   model = genai.GenerativeModel('gemini-2.5-flash')
   response = model.generate_content(prompt)
-  return response.text
+  return response.text, prediction
 
 def getMatchesHype(matches):
   team_list = ", ".join([f"{m['home_team_name']} vs {m['away_team_name']}" for m in matches])
@@ -92,7 +111,8 @@ def findSpotlightMatch(matches, favorites):
 
   if len(spotlightMatches) == 0:
       print("No favorites playing today — letting the AI pick the best match.\n")
-      return getMatchesHype(matches)
+      hype = getMatchesHype(matches)
+      return hype, None, None
 
   elif len(spotlightMatches) == 1:
       return getMatchHype(spotlightMatches[0])
@@ -112,7 +132,7 @@ def findSpotlightMatch(matches, favorites):
         except ValueError:
           print("  Invalid input, please enter a number")
 
-def displayDash(hype_text, matches, favorites):
+def displayDash(hype_text, matches, favorites, prediction):
   print("=" * 45)
   print("       WORLD CUP 2026 DASHBOARD")
   print("=" * 45)
@@ -125,41 +145,57 @@ def displayDash(hype_text, matches, favorites):
   print("\nFAVORITE TEAM MATCHES")
   print("-" * 45)
   conn = getDB()
-  for team_id in favorites:
-    team_name = conn.execute("SELECT name FROM teams WHERE id = ?", (team_id,)).fetchone()
-    next_match = conn.execute("""
-    SELECT m.utc_date, ht.name, at.name
-    FROM matches m 
-    JOIN teams ht ON m.home_team_id = ht.id
-    JOIN teams at ON m.away_team_id = at.id
-    WHERE (m.home_team_id = ? OR m.away_team_id = ?)
-    AND m.status = 'SCHEDULED'
-    ORDER BY m.utc_date ASC
-    LIMIT 1
-    """, (team_id, team_id)).fetchone()
+  if favorites:
+    for team_id in favorites:
+      team_name = conn.execute("SELECT name FROM teams WHERE id = ?", (team_id,)).fetchone()
+      next_match = conn.execute("""
+      SELECT m.utc_date, ht.name, at.name
+      FROM matches m 
+      JOIN teams ht ON m.home_team_id = ht.id
+      JOIN teams at ON m.away_team_id = at.id
+      WHERE (m.home_team_id = ? OR m.away_team_id = ?)
+      AND m.status = 'NS'
+      ORDER BY m.utc_date ASC
+      LIMIT 1
+      """, (team_id, team_id)).fetchone()
 
-    if team_name:
-      print(f"\n{team_name[0]}")
-    if next_match:
-      print(f"Next Match: {next_match[1]} vs {next_match[2]}")
-      print(f"Kickoff: {next_match[0]}")
-    else:
-      print("No upcoming matches found.")
+      if team_name:
+        print(f"\n{team_name[0]}")
+      if next_match:
+        print(f"Next Match: {next_match[1]} vs {next_match[2]}")
+        print(f"Kickoff: {next_match[0]}")
+      else:
+        print("No upcoming matches found.")
+  else:
+    print("No favorites found")
   conn.close()
   
   print("\n SPOTLIGHT MATCHUP")
   print("-" * 45)
+
+  if prediction:
+    print(f"\n{prediction['home_team']} vs {prediction['away_team']}")
+    print(f"\nPrediction")
+    print(f"{prediction['home_team']} Win:  {prediction['home_win_percent']}")
+    print(f"Draw:          {prediction['draw_percent']}")
+    print(f"{prediction['away_team']} Win:  {prediction['away_win_percent']}")
+    print(f"\nPredicted Result: {prediction['predicted_winner']}")
+    print(f"Advice: {prediction['advice']}")
+
   print(hype_text)
 
 if __name__ == "__main__":
-  if dbIsEmpty():
-      promptForFavorites()
+  try:
+    if dbIsEmpty():
+        promptForFavorites()
 
-  favorites = load_favorites()
-  matches = getMatches()
+    favorites = load_favorites()
+    matches = getMatches()
 
-  if not matches:
-      print("No World Cup matches today.")
-  else:
-      hype = findSpotlightMatch(matches, favorites)
-      displayDash(hype, matches, favorites)
+    if not matches:
+        print("No World Cup matches today.")
+    else:
+        hype, prediction = findSpotlightMatch(matches, favorites)
+        displayDash(hype, matches, favorites, prediction)
+  except Exception as e:
+    print(f"\n Something went wrong: {e}")
