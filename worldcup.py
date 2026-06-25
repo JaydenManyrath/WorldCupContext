@@ -8,6 +8,8 @@ from favorites import (
 from spotlight import get_spotlight
 from display import display_matches, display_spotlight, display_favorites
 import time
+from api_youtube import getHighlightVideo
+
 
 def onboard_favorites_if_needed():
   if favorites_is_empty():
@@ -19,11 +21,13 @@ def main():
   onboard_favorites_if_needed()
   matches = get_matches() # api call
   display_matches(matches)
+  favorite_summaries = load_favorite_summaries()
+  display_favorites(favorite_summaries)
   time.sleep(60)
   spotlight = get_spotlight(matches) # api call
   display_spotlight(spotlight)
-  favorite_summaries = load_favorite_summaries()
-  display_favorites(favorite_summaries)
+  print(getHighlightVideo(spotlight))
+  
 
 if __name__ == "__main__":
   main()

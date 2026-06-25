@@ -110,7 +110,7 @@ def generate_hype(match, prediction):
   Write one short hype paragraph for the match between {home} and {away}.
   Prediction context:
   {prediction_text}
-  Explain why this match matters. Mention stakes, style matchup, and storylines to watch.
+  Explain why this match matters. Mention stakes, style matchup, key players to watch, and storylines to watch.
   Do not contradict the prediction context.
   """
   model = genai.GenerativeModel("gemini-2.5-flash")

@@ -6,7 +6,9 @@ load_dotenv()
 
 youtube_key = os.getenv('YOUTUBEAPI') 
 
-def getHighlightVideo(team1, team2):
+def getHighlightVideo(match):
+  team1 = match["teams"]["home"]["name"]
+  team2 = match["teams"]["away"]["name"]
   searchQuery = f"{team1} vs {team2} World Cup Highlights"
   url = "https://www.googleapis.com/youtube/v3/search"
   params = {

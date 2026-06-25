@@ -23,6 +23,9 @@ def load_all_teams():
 
 def select_favorite_teams():
   teams = load_all_teams()
+  if not teams:
+    print("No teams found in database. Run the team ingestion script first")
+    return []
   choices = []
   for team in teams:
     choices.append(
