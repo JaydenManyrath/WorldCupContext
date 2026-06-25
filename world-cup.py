@@ -2,11 +2,17 @@ import os
 import requests
 #import google.generativeai as genai
 from dotenv import load_dotenv
-from database import initialize_database, fetch_all
+from database import initialize_database, fetch_all, get_connection
+from datetime import date
 
 initialize_database()
 tables = fetch_all("SELECT name FROM sqlite_master WHERE type ='table';")
 print(tables)
+
+# returns upcoming matches for a given date
+def show_todays_matches():
+  today = date.today().isoformat()
+
 
 
 #load_dotenv() 

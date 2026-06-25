@@ -20,7 +20,6 @@ def save_teams(teams):
         cursor = conn.cursor()
         for team in teams:
             cursor.execute(
-
                 """
                 INSERT OR REPLACE INTO teams (id, name, tla)
                 VALUES (?, ?, ?)

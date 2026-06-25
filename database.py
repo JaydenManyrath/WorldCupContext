@@ -27,3 +27,7 @@ def fetch_one(query, params=()):
         cursor = conn.cursor()
         cursor.execute(query, params)
         return cursor.fetchone()
+
+initialize_database()
+tables = fetch_all("SELECT name FROM sqlite_master WHERE type ='table';")
+print(tables)
