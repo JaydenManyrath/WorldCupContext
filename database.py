@@ -3,7 +3,9 @@ import sqlite3
 DB_NAME = 'worldcup.db'
 
 def get_connection():
-    return sqlite3.connect(DB_NAME)
+    conn = sqlite3.connect(DB_NAME)
+    conn.row_factory = sqlite3.Row
+    return conn
 
 def initialize_database():
     with get_connection() as conn:
@@ -29,5 +31,3 @@ def fetch_one(query, params=()):
         return cursor.fetchone()
 
 initialize_database()
-tables = fetch_all("SELECT name FROM sqlite_master WHERE type ='table';")
-print(tables)

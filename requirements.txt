@@ -1,0 +1,4 @@
+protobuf==7.35.1
+python-dotenv==1.2.2
+questionary==2.1.1
+Requests==2.34.2

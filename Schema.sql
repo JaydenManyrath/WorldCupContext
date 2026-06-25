@@ -12,8 +12,8 @@ CREATE TABLE IF NOT EXISTS matches (
     utc_date TEXT NOT NULL,
     status TEXT NOT NULL,
 
-    home_team_id INTEGER NOT NULL,
-    away_team_id INTEGER NOT NULL,
+    home_team_id INTEGER,
+    away_team_id INTEGER,
 
     home_team_score INTEGER,
     away_team_score INTEGER,

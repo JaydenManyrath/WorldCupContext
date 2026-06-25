@@ -4,7 +4,6 @@ import re
 from datetime import date
 from database import get_connection
 from dotenv import load_dotenv
-load_dotenv()
 
 API_KEY = os.getenv("SPORTSAPI")
 BASE_URL = "https://v3.football.api-sports.io/fixtures"
@@ -18,9 +17,9 @@ def find_team_by_name(cursor, api_team_name):
   normalized_api_name = normalize_team_name(api_team_name)
   cursor.execute("SELECT id, name FROM teams")
   teams = cursor.fetchall()
-  for team_id, db_name in teams:
-    if normalize_team_name(db_name) == normalized_api_name:
-            return team_id
+  for team in teams:
+    if normalize_team_name(team["name"]) == normalized_api_name:
+            return team["id"]
   return None
 
 def update_team_api(cursor, local_team_id, api_football_id):
@@ -46,6 +45,9 @@ def fetch_matches(match_date=None):
   response = requests.get(BASE_URL, headers=headers, params=params)
   response.raise_for_status()
   data = response.json()
+
+  if data.get("errors"):
+    print("API Errors: ", data["errors"])
 
   all_matches = data["response"]
 
@@ -109,5 +111,3 @@ def get_matches():
     sync_api_ids(cursor, matches)
     conn.commit()
   return matches
-
-print(get_matches())
