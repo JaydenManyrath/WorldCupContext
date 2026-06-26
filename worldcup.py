@@ -26,8 +26,11 @@ def main():
   time.sleep(60)
   spotlight = get_spotlight(matches) # api call
   display_spotlight(spotlight)
-  print(getHighlightVideo(spotlight))
-  
+  title, url = getHighlightVideo(spotlight["match"])
+  print(f"\nYOUTUBE HIGHLIGHT")
+  print("-" * 60)
+  print(f"Watch: {title}")
+  print(f" {url}")  
 
 if __name__ == "__main__":
   main()
