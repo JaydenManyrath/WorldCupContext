@@ -104,10 +104,98 @@ def sync_api_ids(cursor, matches):
       )
     )
 
-def get_matches():
+"""def get_matches():
   matches = fetch_matches()
   with get_connection() as conn:
     cursor = conn.cursor()
     sync_api_ids(cursor, matches)
     conn.commit()
-  return matches
+  return matches"""
+
+def get_matches():
+    return [
+        {
+            "fixture": {
+                "id": 537395,
+                "date": "2026-06-26T14:00:00-04:00",
+                "status": {"short": "NS"},
+                "venue": {"name": "Hard Rock Stadium", "city": "Miami"}
+            },
+            "teams": {
+                "home": {"id": 8872, "name": "Norway"},
+                "away": {"id": 773, "name": "France"}
+            },
+            "goals": {"home": None, "away": None},
+            "league": {"id": 1, "season": 2026}
+        },
+        {
+            "fixture": {
+                "id": 537396,
+                "date": "2026-06-26T14:00:00-04:00",
+                "status": {"short": "NS"},
+                "venue": {"name": "SoFi Stadium", "city": "Los Angeles"}
+            },
+            "teams": {
+                "home": {"id": 804, "name": "Senegal"},
+                "away": {"id": 8062, "name": "Iraq"}
+            },
+            "goals": {"home": None, "away": None},
+            "league": {"id": 1, "season": 2026}
+        },
+        {
+            "fixture": {
+                "id": 537374,
+                "date": "2026-06-26T19:00:00-04:00",
+                "status": {"short": "NS"},
+                "venue": {"name": "Levi's Stadium", "city": "San Francisco"}
+            },
+            "teams": {
+                "home": {"id": 1930, "name": "Cabo Verde"},
+                "away": {"id": 801, "name": "Saudi Arabia"}
+            },
+            "goals": {"home": None, "away": None},
+            "league": {"id": 1, "season": 2026}
+        },
+        {
+            "fixture": {
+                "id": 537373,
+                "date": "2026-06-26T19:00:00-04:00",
+                "status": {"short": "NS"},
+                "venue": {"name": "MetLife Stadium", "city": "New York"}
+            },
+            "teams": {
+                "home": {"id": 758, "name": "Uruguay"},
+                "away": {"id": 760, "name": "Spain"}
+            },
+            "goals": {"home": None, "away": None},
+            "league": {"id": 1, "season": 2026}
+        },
+        {
+            "fixture": {
+                "id": 537367,
+                "date": "2026-06-26T22:00:00-04:00",
+                "status": {"short": "NS"},
+                "venue": {"name": "Gillette Stadium", "city": "Boston"}
+            },
+            "teams": {
+                "home": {"id": 783, "name": "New Zealand"},
+                "away": {"id": 805, "name": "Belgium"}
+            },
+            "goals": {"home": None, "away": None},
+            "league": {"id": 1, "season": 2026}
+        },
+        {
+            "fixture": {
+                "id": 537368,
+                "date": "2026-06-26T22:00:00-04:00",
+                "status": {"short": "NS"},
+                "venue": {"name": "Rose Bowl", "city": "Los Angeles"}
+            },
+            "teams": {
+                "home": {"id": 825, "name": "Egypt"},
+                "away": {"id": 840, "name": "Iran"}
+            },
+            "goals": {"home": None, "away": None},
+            "league": {"id": 1, "season": 2026}
+        }
+    ]
